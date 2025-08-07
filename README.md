@@ -26,9 +26,3 @@ A one-day challenge project to generate AI-powered insights from GitHub repos or
 
 ### Frontend
 Open `frontend/index.html` in your browser.
-
-## 📦 Output
-- AI Insights Dashboard from uploaded doc or repo link.
-
-## 📌 Note
-This is a one-day build. More features and polish can be added in the future.
