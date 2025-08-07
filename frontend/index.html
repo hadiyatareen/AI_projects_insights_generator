@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spoon AI Insights Generator 🥄</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #4f46e5, #ec4899);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #e0e0e0;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(to right, #f9a8d4, #c084fc);
+      border: none;
+      border-radius: 10px;
+      color: #333;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(to right, #f472b6, #a78bfa);
+    }
+    pre {
+      background: rgba(0,0,0,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Spoon AI Insights Generator 🥄</h1>
+
+    <input type="text" id="repo" placeholder="Paste GitHub repo link..." />
+    <input type="file" id="file" onchange="uploadFile()" />
+    <textarea id="text" placeholder="Or paste any content here..."></textarea>
+    <button onclick="submitData()">✨ Generate AI Insights</button>
+
+    <pre id="result"></pre>
+  </div>
+
+  <script>
+    async function submitData() {
+      const repo = document.getElementById('repo').value;
+      const text = document.getElementById('text').value;
+
+      const response = await fetch('http://localhost:5000/analyze', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ github_url: repo, text: text })
+      });
+
+      const data = await response.json();
+      document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function uploadFile() {
+      const fileInput = document.getElementById('file');
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      const res = await fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      document.getElementById('text').value = data.text;
+    }
+  </script>
+</body>
+</html>
