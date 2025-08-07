@@ -8,7 +8,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-openai.api_key = "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"
+openai.api_key = "key"
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
